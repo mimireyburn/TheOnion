@@ -1,11 +1,15 @@
 import transformers
 import model
-import data
+import data_onion as data
 import os
+import wandb
+import torch
 
+# Check if GPU is available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 is_ddp = int(os.environ.get("WORLD_SIZE", 1)) != 1
-m = model.get_model()
+m = model.get_model().to(device)
 ds = data.TrainDataset()
 collator = transformers.DataCollatorForSeq2Seq(ds.tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True)
 
@@ -30,6 +34,7 @@ wandb.init(
     "learning_rate": learning_rate,
     "optim": optim,
     "batch_size": batch_size,
+    "device": device.type,  
   }
 )
 
@@ -52,7 +57,7 @@ trainer = transformers.Trainer(
     output_dir="./output",
     save_total_limit=3,
     report_to="wandb",
-    ddp_find_unused_parameters=False if is_ddp else None,
+    ddp_find_unused_parameters=False if is_ddp else None
   ),
 )
 

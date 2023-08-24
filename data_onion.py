@@ -6,7 +6,7 @@ import pandas as pd
 
 TEMPLATE = "Below is a title for an article. Write an article that appropriately suits the title: \n\n### Title:\n{title}\n\n### Article:\n"
 
-class OnionTrainDataset(Dataset):
+class TrainDataset(Dataset):
   def __init__(self):
     self.tokenizer = t.AutoTokenizer.from_pretrained("NousResearch/Llama-2-7b-hf")
     self.tokenizer.pad_token_id = 0
@@ -16,7 +16,7 @@ class OnionTrainDataset(Dataset):
     self.data_df = self.data_df.drop(columns=["Published Time"])
 
     self.ds_prompts = self.data_df.apply(self.prompt,  axis=1)
-    self.ds = self.ds_prompts.apply(self.tokenize, axis=1)
+    self.ds = self.ds_prompts.apply(self.tokenize)
 
   def __len__(self):
     return len(self.ds)
@@ -38,5 +38,3 @@ class OnionTrainDataset(Dataset):
 
   def max_seq_len(self):
     return max([len(elm["input_ids"]) for elm in self.ds])
-  
-OnionTrainDataset()
