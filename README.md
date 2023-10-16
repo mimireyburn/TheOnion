@@ -21,7 +21,7 @@ Take the first article in the dataset as an example:
 
 It is worth noting that many of the articles in the dataset are insensitive in almost every way. The Onion is pure satyre and should be treated as such. 
 
-### Why is this a good idea?
+### Why is this a good idea?
 Few-shot learning shows us that the model often defaults to writing a news article, without the subtle humour we are aiming to generate. Fine-tuning a model on a dataset of satirical news articles will help the model understand the exact style we are looking for. Plus, it gives me great satisfaction to apply the world's most advanced technology to something entirely useless.
 
 ## Results 
